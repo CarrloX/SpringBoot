@@ -2,6 +2,7 @@ package com.riwi.products.services;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.riwi.products.entitys.Product;
@@ -14,12 +15,14 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class ProductService implements IProductService{
 
+    @Autowired
+    private ProductRepository objProductRepository;
+
     private final ProductRepository productRepository;
 
     @Override
-    public Product save(Product product) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'save'");
+    public Product save(Product objProduct) {
+        return this.productRepository.save(objProduct);
     }
 
     @Override
@@ -29,20 +32,29 @@ public class ProductService implements IProductService{
 
     @Override
     public Product findById(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findById'");
+        return this.objProductRepository.findById(id).orElse(null);
     }
 
     @Override
     public boolean delete(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'delete'");
+    if (this.objProductRepository.existsById(id)) {
+        this.objProductRepository.deleteById(id);
+        return true;
+    } else {
+        return false;
     }
+}
 
     @Override
-    public Product update(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
+    public Product update(Long id,Product objProduct) {
+        Product objProductDB = this.findById(id);
+
+        if (objProductDB == null) {
+            return null;
+        }
+        objProductDB = objProduct;
+
+        return this.objProductRepository.save(objProduct);
     }
 
     @Override

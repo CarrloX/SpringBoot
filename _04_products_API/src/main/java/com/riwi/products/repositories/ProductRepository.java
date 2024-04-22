@@ -9,3 +9,4 @@ import com.riwi.products.entitys.Product;
 public interface ProductRepository extends JpaRepository<Product, Long> {
     public Product findByName (String name);
 }
+
