@@ -2,7 +2,6 @@ package com.riwi.products.services;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.riwi.products.entitys.Product;
@@ -15,14 +14,11 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class ProductService implements IProductService{
 
-    @Autowired
-    private ProductRepository objProductRepository;
-
     private final ProductRepository productRepository;
 
     @Override
-    public Product save(Product objProduct) {
-        return this.productRepository.save(objProduct);
+    public Product save(Product Product) {
+        return this.productRepository.save(Product);
     }
 
     @Override
@@ -32,13 +28,13 @@ public class ProductService implements IProductService{
 
     @Override
     public Product findById(Long id) {
-        return this.objProductRepository.findById(id).orElse(null);
+        return this.productRepository.findById(id).orElseThrow();
     }
 
     @Override
     public boolean delete(Long id) {
-    if (this.objProductRepository.existsById(id)) {
-        this.objProductRepository.deleteById(id);
+    if (this.productRepository.existsById(id)) {
+        this.productRepository.deleteById(id);
         return true;
     } else {
         return false;
@@ -54,7 +50,7 @@ public class ProductService implements IProductService{
         }
         objProductDB = objProduct;
 
-        return this.objProductRepository.save(objProduct);
+        return this.productRepository.save(objProduct);
     }
 
     @Override
