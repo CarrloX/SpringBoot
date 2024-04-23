@@ -43,13 +43,9 @@ public class ProductService implements IProductService{
 
     @Override
     public Product update(Long id,Product objProduct) {
-        Product objProductDB = this.findById(id);
+        this.productRepository.findById(id).orElseThrow();
 
-        if (objProductDB == null) {
-            return null;
-        }
-        objProductDB = objProduct;
-
+        objProduct.setId(id);
         return this.productRepository.save(objProduct);
     }
 
