@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,9 +41,17 @@ public class ProductController {
         return ResponseEntity.ok(this.productService.save(objProduct));
     }
 
-    @PutMapping(path = "{/id}")
+    @PutMapping(path = "/{id}")
     public ResponseEntity<Product> update(
         @PathVariable Long id,//path variable porque el id viene por URL
         @RequestBody Product product)//request body porque los datos vienen por el cuerpo de la peticion
-        {return ResponseEntity.ok(this.productService.update(id, product));}
+    {
+        return ResponseEntity.ok(this.productService.update(id, product));
+    }
+
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id){
+        this.productService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 }

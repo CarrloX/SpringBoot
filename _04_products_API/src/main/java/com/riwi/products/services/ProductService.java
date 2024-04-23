@@ -32,14 +32,10 @@ public class ProductService implements IProductService{
     }
 
     @Override
-    public boolean delete(Long id) {
-    if (this.productRepository.existsById(id)) {
-        this.productRepository.deleteById(id);
-        return true;
-    } else {
-        return false;
+    public void delete(Long id) {
+        Product productFind = this.productRepository.findById(id).orElseThrow();
+        this.productRepository.delete(productFind);
     }
-}
 
     @Override
     public Product update(Long id,Product objProduct) {
