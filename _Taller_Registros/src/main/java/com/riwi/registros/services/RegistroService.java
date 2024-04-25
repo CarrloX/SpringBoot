@@ -18,8 +18,8 @@ public class RegistroService implements IRegistroService{
 
     @Override
     public void delete(String id) {
-        // TODO Auto-generated method stub
-        
+        Registro registroFind =this.registroRepository.findById(id).orElseThrow();
+        this.registroRepository.delete(registroFind);
     }
 
     @Override
@@ -38,15 +38,10 @@ public class RegistroService implements IRegistroService{
     }
 
     @Override
-    public List<Registro> search(String name) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Registro update(String id, Registro registro) {
-        // TODO Auto-generated method stub
-        return null;
+    public Registro update(String id, Registro objRegistro) {
+       this.registroRepository.findById(id).orElseThrow();
+       objRegistro.setId(id);
+       return this.registroRepository.save(objRegistro);
     }
 
     
