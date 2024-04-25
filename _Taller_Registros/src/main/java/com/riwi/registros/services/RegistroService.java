@@ -2,6 +2,10 @@ package com.riwi.registros.services;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.riwi.registros.entity.Registro;
@@ -14,6 +18,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class RegistroService implements IRegistroService{
 
+    @Autowired
     private final RegistroRepository registroRepository;
 
     @Override
@@ -31,6 +36,16 @@ public class RegistroService implements IRegistroService{
     public List<Registro> getAll() {
         return this.registroRepository.findAll();
     }
+
+    public Page <Registro> findPaginated(int page, int size){
+        if (page <0) {
+            page = 1;
+        }
+
+        Pageable objPageable=PageRequest.of(page,size);
+
+        return this.registroRepository.findAll(objPageable);
+    }    
 
     @Override
     public Registro save(Registro registro) {

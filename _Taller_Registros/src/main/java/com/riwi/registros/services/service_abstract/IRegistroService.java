@@ -2,6 +2,8 @@ package com.riwi.registros.services.service_abstract;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+
 import com.riwi.registros.entity.Registro;
 
 public interface IRegistroService {
@@ -15,4 +17,6 @@ public interface IRegistroService {
     public void delete(String id);
 
     public Registro update(String id,Registro registro);
+
+    public Page<Registro> findPaginated(int i, int size);
 }
