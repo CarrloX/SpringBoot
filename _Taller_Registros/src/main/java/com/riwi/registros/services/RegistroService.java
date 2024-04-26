@@ -37,16 +37,6 @@ public class RegistroService implements IRegistroService{
         return this.registroRepository.findAll();
     }
 
-    public Page <Registro> findPaginated(int page, int size){
-        if (page <0) {
-            page = 1;
-        }
-
-        Pageable objPageable=PageRequest.of(page,size);
-
-        return this.registroRepository.findAll(objPageable);
-    }    
-
     @Override
     public Registro save(Registro registro) {
         return this.registroRepository.save(registro);

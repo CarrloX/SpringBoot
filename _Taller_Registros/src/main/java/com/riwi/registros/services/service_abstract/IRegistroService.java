@@ -17,6 +17,4 @@ public interface IRegistroService {
     public void delete(String id);
 
     public Registro update(String id,Registro registro);
-
-    public Page<Registro> findPaginated(int i, int size);
 }
