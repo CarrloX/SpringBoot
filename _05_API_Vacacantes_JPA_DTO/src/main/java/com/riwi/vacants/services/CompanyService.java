@@ -59,8 +59,9 @@ public class CompanyService implements ICompanyService{
 
     @Override
     public CompanyResponse getById(String id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getById'");
+        Company company = this.find(id);
+
+        return this.entityToResponse(company);
     }
 
     //este metodo se encargara de convertir una entidad en el dto de respuesta de la entidad
@@ -97,6 +98,10 @@ public class CompanyService implements ICompanyService{
         company.setName(request.getName());
         company.setVacants(new ArrayList<>());
         return company;
+    }
+
+    private Company find(String id){
+        return this.companyRepository.findById(id).orElseThrow();
     }
     
 }
