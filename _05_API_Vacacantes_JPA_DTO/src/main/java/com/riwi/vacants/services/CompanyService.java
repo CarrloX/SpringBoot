@@ -1,5 +1,8 @@
 package com.riwi.vacants.services;
 
+import java.util.ArrayList;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -7,10 +10,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.riwi.vacants.entity.Company;
+import com.riwi.vacants.entity.Vacant;
 import com.riwi.vacants.repos.CompanyRepository;
 import com.riwi.vacants.services.interfaces.ICompanyService;
 import com.riwi.vacants.utils.dto.request.CompanyRequest;
 import com.riwi.vacants.utils.dto.response.CompanyResponse;
+import com.riwi.vacants.utils.dto.response.VacantToCompanyResponse;
 
 import lombok.AllArgsConstructor;
 @Service
@@ -34,8 +39,10 @@ public class CompanyService implements ICompanyService{
 
     @Override
     public CompanyResponse create(CompanyRequest request) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'create'");
+        //convertimos el request en la entidad
+        Company company = this.requestToEntity(request, new Company());
+        //agregamos la entidad en el repositorio y el retorno lo convertimos en respuesta
+        return this.entityToResponse(this.companyRepository.save(company)); 
     }
 
     @Override
@@ -63,8 +70,33 @@ public class CompanyService implements ICompanyService{
         //beanUtils nos permite hacer una copia de una clase en otra, en este caso toda la entidad
         //de tipo company sera copiada con la informacion requerida por la varibale
         //tipo companyResponse
+
         BeanUtils.copyProperties(entity, response);
+
+        //stream->convierte la lista en coleccion para poder iterarse
+        //map -> itera toda la lista y retorna cambios
+        //collect -> crea de nuevo toda la lista que se habia transformado en colecciones
+
+        response.setVacants(entity.getVacants().stream()
+        .map(vacant -> this.vacantToResponse(vacant))
+        .collect(Collectors.toList()));
         return response;
+    }
+
+    private VacantToCompanyResponse vacantToResponse(Vacant entity){
+        VacantToCompanyResponse response = new VacantToCompanyResponse();
+
+        BeanUtils.copyProperties(entity, response);
+
+        return response;
+    }
+
+    private Company requestToEntity (CompanyRequest request, Company company){
+        company.setContact(request.getContact());
+        company.setLocation(request.getLocation());
+        company.setName(request.getName());
+        company.setVacants(new ArrayList<>());
+        return company;
     }
     
 }
