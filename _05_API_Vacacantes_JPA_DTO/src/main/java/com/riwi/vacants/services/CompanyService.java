@@ -59,8 +59,10 @@ public class CompanyService implements ICompanyService{
 
     @Override
     public CompanyResponse getById(String id) {
+        //buscamos la compañia con el id
         Company company = this.find(id);
 
+        //convertimos la entidad al dto de respuesta y lo returnamos
         return this.entityToResponse(company);
     }
 
