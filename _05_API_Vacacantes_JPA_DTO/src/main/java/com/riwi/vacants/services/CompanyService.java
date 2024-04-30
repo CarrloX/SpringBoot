@@ -53,8 +53,10 @@ public class CompanyService implements ICompanyService{
 
     @Override
     public void delete(String id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'delete'");
+        //buscamos la compañia a la que corresponde el id
+        Company company = this.find(id);
+        //y la eliminamos
+        this.companyRepository.delete(company);
     }
 
     @Override
