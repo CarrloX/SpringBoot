@@ -1,12 +1,18 @@
 package com.riwi.vacants.controllers.errors;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder.MethodArgumentBuilder;
 
 import com.riwi.vacants.utils.dto.errors.BaseErrorResponse;
 import com.riwi.vacants.utils.dto.errors.ErrorResponse;
+import com.riwi.vacants.utils.dto.errors.ErrorsResponse;
 import com.riwi.vacants.utils.exceptions.IdNotFoundException;
 
 //restcontrolleradvice = controlador de errores
@@ -31,5 +37,19 @@ public class BadRequestController {
         // error.setMessage(exception.getMessage());
         // error.setStatus(HttpStatus.BAD_REQUEST.name());
         // error.code(HttpStatus.BAD_REQUEST.value());
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public BaseErrorResponse handleErrors(MethodArgumentNotValidException exception){
+        List<String> errors = new ArrayList<>();
+
+        exception.getAllErrors().forEach(error ->errors.add(error.
+        getDefaultMessage()));
+
+        return ErrorsResponse.builder()
+        .errors(errors)
+        .status(HttpStatus.BAD_REQUEST.name())
+        .code(HttpStatus.BAD_REQUEST.value())
+        .build();
     }
 }
