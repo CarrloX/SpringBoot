@@ -16,6 +16,7 @@ import com.riwi.vacants.services.interfaces.ICompanyService;
 import com.riwi.vacants.utils.dto.request.CompanyRequest;
 import com.riwi.vacants.utils.dto.response.CompanyResponse;
 import com.riwi.vacants.utils.dto.response.VacantToCompanyResponse;
+import com.riwi.vacants.utils.exceptions.IdNotFoundException;
 
 import lombok.AllArgsConstructor;
 @Service
@@ -108,7 +109,8 @@ public class CompanyService implements ICompanyService{
     }
 
     private Company find(String id){
-        return this.companyRepository.findById(id).orElseThrow();
+        return this.companyRepository.findById(id).orElseThrow(()-> new 
+        IdNotFoundException("Company"));
     }
     
 }
