@@ -47,8 +47,11 @@ public class CompanyService implements ICompanyService{
 
     @Override
     public CompanyResponse update(CompanyRequest request, String id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
+        Company companyToUpdate = this.find(id);
+        
+        Company company=this.requestToEntity(request, companyToUpdate);
+
+        return this.entityToResponse(this.companyRepository.save(company));
     }
 
     @Override
