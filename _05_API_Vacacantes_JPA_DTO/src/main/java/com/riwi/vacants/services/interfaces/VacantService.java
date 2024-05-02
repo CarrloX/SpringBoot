@@ -6,12 +6,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import com.riwi.vacants.entity.Company;
 import com.riwi.vacants.entity.Vacant;
 import com.riwi.vacants.repos.CompanyRepository;
 import com.riwi.vacants.repos.VacantRepository;
 import com.riwi.vacants.utils.dto.request.VacantRequest;
 import com.riwi.vacants.utils.dto.response.CompanyToVacantResponse;
 import com.riwi.vacants.utils.dto.response.VacantsResponse;
+import com.riwi.vacants.utils.enums.StatusVacant;
+import com.riwi.vacants.utils.exceptions.IdNotFoundException;
 
 import lombok.AllArgsConstructor;
 
@@ -39,8 +42,20 @@ public class VacantService implements IVacantsService{
 
     @Override
     public VacantsResponse create(VacantRequest request) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'create'");
+
+        //buscamos la compañia que correponda con el id que esta dentro del request
+
+        Company company= this.companyRepository.findById(request.getCompanyId())
+            .orElseThrow(()-> new IdNotFoundException("Company"));
+
+            //convertimos el request a una instancia de vacante 
+
+        Vacant vacant = this.requestToVacant(request, new Vacant());
+        vacant.setCompany(company);
+
+        //guardamos en la DB y convertimos la nueva entidad al DTO de respuesta
+
+        return this.entityToRespons(this.vacantRepository.save(vacant));
     }
 
     @Override
@@ -82,4 +97,12 @@ public class VacantService implements IVacantsService{
         return response;
     }
     
-}
+    private Vacant requestToVacant (VacantRequest request, Vacant entity){
+
+        entity.setTitle(request.getTitle());
+        entity.setDescription(request.getDescription());
+        entity.setStatus(StatusVacant.ACTIVE);
+
+        return entity;
+    }
+}    
