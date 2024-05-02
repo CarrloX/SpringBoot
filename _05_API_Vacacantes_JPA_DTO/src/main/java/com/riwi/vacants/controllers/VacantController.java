@@ -3,6 +3,7 @@ package com.riwi.vacants.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,7 +35,8 @@ public class VacantController {
     }
 
     @PostMapping
-    public ResponseEntity<VacantsResponse> insert(@RequestBody VacantRequest vacant){
+    public ResponseEntity<VacantsResponse> insert(
+        @Validated @RequestBody VacantRequest vacant){
         return ResponseEntity.ok(this.vacantsService.create(vacant));
     }
 }
