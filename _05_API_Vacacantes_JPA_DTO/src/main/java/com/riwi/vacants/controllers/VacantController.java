@@ -1,9 +1,14 @@
 package com.riwi.vacants.controllers;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,7 +39,7 @@ public class VacantController {
         return ResponseEntity.ok(this.vacantsService.getAll(page - 1, size));
     }
 
-    @GetMapping
+    @GetMapping(path = "/{id}")
     public ResponseEntity<VacantsResponse> get(
             @PathVariable Long id) {
         return ResponseEntity.ok(this.vacantsService.getById(id));
@@ -44,5 +49,20 @@ public class VacantController {
     public ResponseEntity<VacantsResponse> insert(
             @Validated @RequestBody VacantRequest vacant) {
         return ResponseEntity.ok(this.vacantsService.create(vacant));
+    }
+
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<Map<String,String>> delete(
+        @PathVariable Long id
+    ){
+
+        //creamos el mapa
+        Map<String,String> response = new HashMap<>();
+
+        response.put("message", "vacante elimindada correctaemnte");
+
+        this.vacantsService.delete(id);
+        
+        return ResponseEntity.ok(response);
     }
 }

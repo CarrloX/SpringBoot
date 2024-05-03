@@ -20,7 +20,7 @@ import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
-public class VacantService implements IVacantsService{
+public class VacantService implements IVacantsService {
 
     @Autowired
     private final VacantRepository vacantRepository;
@@ -30,30 +30,31 @@ public class VacantService implements IVacantsService{
     @Override
     public Page<VacantsResponse> getAll(int page, int size) {
 
-        if (page <0) page = 0;
+        if (page < 0)
+            page = 0;
 
         PageRequest pagination = PageRequest.of(page, size);
 
-        //obetenemos todas las vacantes, las iteramos para convertir cada una
+        // obetenemos todas las vacantes, las iteramos para convertir cada una
 
         return this.vacantRepository.findAll(pagination)
-            .map(vacant -> this.entityToRespons(vacant)); 
+                .map(vacant -> this.entityToRespons(vacant));
     }
 
     @Override
     public VacantsResponse create(VacantRequest request) {
 
-        //buscamos la compañia que correponda con el id que esta dentro del request
+        // buscamos la compañia que correponda con el id que esta dentro del request
 
-        Company company= this.companyRepository.findById(request.getCompanyId())
-            .orElseThrow(()-> new IdNotFoundException("Company"));
+        Company company = this.companyRepository.findById(request.getCompanyId())
+                .orElseThrow(() -> new IdNotFoundException("Company"));
 
-            //convertimos el request a una instancia de vacante 
+        // convertimos el request a una instancia de vacante
 
         Vacant vacant = this.requestToVacant(request, new Vacant());
         vacant.setCompany(company);
 
-        //guardamos en la DB y convertimos la nueva entidad al DTO de respuesta
+        // guardamos en la DB y convertimos la nueva entidad al DTO de respuesta
 
         return this.entityToRespons(this.vacantRepository.save(vacant));
     }
@@ -66,8 +67,8 @@ public class VacantService implements IVacantsService{
 
     @Override
     public void delete(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'delete'");
+        Vacant vacant = this.find(id);
+        this.vacantRepository.delete(vacant);
     }
 
     @Override
@@ -75,28 +76,29 @@ public class VacantService implements IVacantsService{
         return this.entityToRespons(this.find(id));
     }
 
-    private VacantsResponse entityToRespons(Vacant entity){
-        //creamos la instancia del DTO del vacante
+    private VacantsResponse entityToRespons(Vacant entity) {
+        // creamos la instancia del DTO del vacante
         VacantsResponse response = new VacantsResponse();
 
-        //copiar  toda la enitidad en el DTO
+        // copiar toda la enitidad en el DTO
         BeanUtils.copyProperties(entity, response);
 
-        //creamos la instancia del dto de compañia dentro de la vacante
+        // creamos la instancia del dto de compañia dentro de la vacante
         CompanyToVacantResponse companyDto = new CompanyToVacantResponse();
 
-        //copio todas las propiedades de la compañia que se encuentra dentro de la entidad
-        //(vacante) en el dto de repuesta
-    
+        // copio todas las propiedades de la compañia que se encuentra dentro de la
+        // entidad
+        // (vacante) en el dto de repuesta
+
         BeanUtils.copyProperties(entity.getCompany(), companyDto);
 
-        //agregamos el dto lleno a la respuesta final
+        // agregamos el dto lleno a la respuesta final
         response.setCompany(companyDto);
 
         return response;
     }
-    
-    private Vacant requestToVacant (VacantRequest request, Vacant entity){
+
+    private Vacant requestToVacant(VacantRequest request, Vacant entity) {
 
         entity.setTitle(request.getTitle());
         entity.setDescription(request.getDescription());
@@ -105,8 +107,8 @@ public class VacantService implements IVacantsService{
         return entity;
     }
 
-    private Vacant find(Long id){
+    private Vacant find(Long id) {
         return this.vacantRepository.findById(id)
-            .orElseThrow(()-> new IdNotFoundException("Vacant"));
+                .orElseThrow(() -> new IdNotFoundException("Vacant"));
     }
-}    
+}
