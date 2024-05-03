@@ -72,8 +72,7 @@ public class VacantService implements IVacantsService{
 
     @Override
     public VacantsResponse getById(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getById'");
+        return this.entityToRespons(this.find(id));
     }
 
     private VacantsResponse entityToRespons(Vacant entity){
@@ -104,5 +103,10 @@ public class VacantService implements IVacantsService{
         entity.setStatus(StatusVacant.ACTIVE);
 
         return entity;
+    }
+
+    private Vacant find(Long id){
+        return this.vacantRepository.findById(id)
+            .orElseThrow(()-> new IdNotFoundException("Vacant"));
     }
 }    

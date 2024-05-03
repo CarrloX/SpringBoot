@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,16 +28,21 @@ public class VacantController {
 
     @GetMapping
     public ResponseEntity<Page<VacantsResponse>> getAll(
-        @RequestParam(defaultValue = "1") int page,
-        @RequestParam(defaultValue = "7") int size
-    ){
-        
-        return ResponseEntity.ok(this.vacantsService.getAll(page-1, size));
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "7") int size) {
+
+        return ResponseEntity.ok(this.vacantsService.getAll(page - 1, size));
+    }
+
+    @GetMapping
+    public ResponseEntity<VacantsResponse> get(
+            @PathVariable Long id) {
+        return ResponseEntity.ok(this.vacantsService.getById(id));
     }
 
     @PostMapping
     public ResponseEntity<VacantsResponse> insert(
-        @Validated @RequestBody VacantRequest vacant){
+            @Validated @RequestBody VacantRequest vacant) {
         return ResponseEntity.ok(this.vacantsService.create(vacant));
     }
 }
