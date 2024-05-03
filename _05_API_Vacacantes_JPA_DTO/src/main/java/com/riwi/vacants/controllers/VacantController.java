@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -51,17 +52,24 @@ public class VacantController {
     }
 
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity<Map<String,String>> delete(
-        @PathVariable Long id
-    ){
+    public ResponseEntity<Map<String, String>> delete(
+            @PathVariable Long id) {
 
-        //creamos el mapa
-        Map<String,String> response = new HashMap<>();
+        // creamos el mapa
+        Map<String, String> response = new HashMap<>();
 
-        response.put("message", "vacante elimindada correctaemnte");
+        response.put("message", "vacante elimindada correctmente");
 
         this.vacantsService.delete(id);
 
         return ResponseEntity.ok(response);
+    }
+
+    @PutMapping(path = "")
+    public ResponseEntity<VacantsResponse> update(
+            @PathVariable Long id,
+            @Validated @RequestBody VacantRequest vacant) {
+
+        return ResponseEntity.ok(this.vacantsService.update(vacant, id));
     }
 }

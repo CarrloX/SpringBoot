@@ -61,8 +61,21 @@ public class VacantService implements IVacantsService {
 
     @Override
     public VacantsResponse update(VacantRequest request, Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
+        // buscamos la vacante
+        Vacant vacant = this.find(id);
+
+        // validamos la compañia
+        Company company = this.companyRepository.findById(request.getCompanyId())
+                .orElseThrow(() -> new IdNotFoundException("Company"));
+
+        // convertimos el DTO de request
+        vacant = this.requestToVacant(request, vacant);
+        // agregamos la vancate
+        vacant.setCompany(company);
+        // agregamos el nuevo status
+        vacant.setStatus(request.getStatus());
+
+        return this.entityToRespons(this.vacantRepository.save(vacant));
     }
 
     @Override
