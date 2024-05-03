@@ -3,7 +3,6 @@ package com.riwi.vacants.controllers;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -62,7 +61,7 @@ public class VacantController {
         response.put("message", "vacante elimindada correctaemnte");
 
         this.vacantsService.delete(id);
-        
+
         return ResponseEntity.ok(response);
     }
 }
