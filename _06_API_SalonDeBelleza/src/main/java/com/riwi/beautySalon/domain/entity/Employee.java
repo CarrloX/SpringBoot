@@ -1,18 +1,25 @@
 package com.riwi.beautySalon.domain.entity;
 
+import java.util.List;
+
 import com.riwi.beautySalon.utils.enums.RoleEmployee;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity(name = "employee")
 @Data
@@ -33,5 +40,12 @@ public class Employee {
     private String phone;
     @Column (nullable = false)
     @Enumerated(EnumType.STRING)
-    private RoleEmployee role;    
+    private RoleEmployee role;   
+    
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany(mappedBy = "employee",fetch = FetchType.EAGER,cascade = CascadeType.ALL,
+    orphanRemoval = false)
+    private List<Appointment> appointments;
 }
