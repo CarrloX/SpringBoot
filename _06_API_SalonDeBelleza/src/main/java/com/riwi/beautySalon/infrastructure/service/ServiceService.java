@@ -15,6 +15,8 @@ import com.riwi.beautySalon.domain.entity.ServiceEntity;
 import com.riwi.beautySalon.domain.repositories.ServiceRepository;
 import com.riwi.beautySalon.infrastructure.abstract_services.IServiceService;
 import com.riwi.beautySalon.utils.enums.SortType;
+import com.riwi.beautySalon.utils.enums.exceptions.BadRequestException;
+import com.riwi.beautySalon.utils.messages.ErrorMessage;
 
 import lombok.AllArgsConstructor;
 
@@ -76,28 +78,28 @@ public class ServiceService implements IServiceService {
         throw new UnsupportedOperationException("Unimplemented method 'search'");
     }
 
-    private ServiceResp entityToResp(ServiceEntity entity){
+    private ServiceResp entityToResp(ServiceEntity entity) {
 
         return ServiceResp.builder()
-            .id(entity.getId())
-            .name(entity.getName())
-            .price(entity.getPrice())
-            .description(entity.getDescription())
-            .build();
+                .id(entity.getId())
+                .name(entity.getName())
+                .price(entity.getPrice())
+                .description(entity.getDescription())
+                .build();
     }
 
-        private ServiceEntity requestToEntity(ServiceReq request){
+    private ServiceEntity requestToEntity(ServiceReq request) {
 
-            return ServiceEntity.builder()
-            .name(request.getName())
-            .price(request.getPrice())
-            .description(request.getDescription())
-            .build();
-        }
+        return ServiceEntity.builder()
+                .name(request.getName())
+                .price(request.getPrice())
+                .description(request.getDescription())
+                .build();
+    }
 
-        private ServiceEntity find(Long id){
+    private ServiceEntity find(Long id) {
 
-            return this.serviceRepository.findById(id)
-            .orElseThrow(null);
-        }
+        return this.serviceRepository.findById(id)
+                .orElseThrow(() -> new BadRequestException(ErrorMessage.idNotFound("Servicio")));
+    }
 }
