@@ -15,10 +15,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ServiceReq {
-    @NotNull(message = "el nombre del servicio es requerido")
     @NotBlank(message = "el nombre del servicio es requerido")
     private String name;
     private String description;
+    @NotNull(message = "el preico es requerido")
     @DecimalMin(value = "0.01",message = "el valor del servicio debe ser mayor a 0")
     private BigDecimal price;
 }
