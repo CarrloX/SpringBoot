@@ -37,8 +37,7 @@ public class ServiceService implements IServiceService {
 
     @Override
     public ServiceResp get(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'get'");
+        return this.entityToResp(this.find(id));
     }
 
     @Override
