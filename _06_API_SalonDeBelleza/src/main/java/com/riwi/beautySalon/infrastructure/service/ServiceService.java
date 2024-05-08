@@ -94,4 +94,10 @@ public class ServiceService implements IServiceService {
             .description(request.getDescription())
             .build();
         }
+
+        private ServiceEntity find(Long id){
+
+            return this.serviceRepository.findById(id)
+            .orElseThrow(null);
+        }
 }
