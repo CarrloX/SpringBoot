@@ -28,8 +28,9 @@ public class ServiceService implements IServiceService {
 
     @Override
     public ServiceResp create(ServiceReq request) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'create'");
+        ServiceEntity service = this.requestToEntity(request);
+
+        return this.entityToResp(this.serviceRepository.save(service));
     }
 
     @Override
@@ -85,4 +86,12 @@ public class ServiceService implements IServiceService {
             .build();
     }
 
+        private ServiceEntity requestToEntity(ServiceReq request){
+
+            return ServiceEntity.builder()
+            .name(request.getName())
+            .price(request.getPrice())
+            .description(request.getDescription())
+            .build();
+        }
 }
