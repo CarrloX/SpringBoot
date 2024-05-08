@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.riwi.beautySalon.api.dto.request.ServiceReq;
 import com.riwi.beautySalon.api.dto.response.ServiceResp;
+import com.riwi.beautySalon.domain.entity.ServiceEntity;
 import com.riwi.beautySalon.domain.repositories.ServiceRepository;
 import com.riwi.beautySalon.infrastructure.abstract_services.IServiceService;
 import com.riwi.beautySalon.utils.enums.SortType;
@@ -51,9 +52,10 @@ public class ServiceService implements IServiceService {
 
     @Override
     public Page<ServiceResp> getAll(int page, int size, SortType sortType) {
-        if(page <0) page = 0;
-        
-    PageRequest pagination = null;
+        if (page < 0)
+            page = 0;
+
+        PageRequest pagination = null;
 
         switch (sortType) {
             case NONE -> pagination = PageRequest.of(page, size);
@@ -63,13 +65,24 @@ public class ServiceService implements IServiceService {
 
         this.serviceRepository.findAll(pagination);
 
-        return null;
+        return this.serviceRepository.findAll(pagination)
+                .map(this::entityToResp);
     }
 
     @Override
     public List<ServiceResp> search(String name) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'search'");
+    }
+
+    private ServiceResp entityToResp(ServiceEntity entity){
+
+        return ServiceResp.builder()
+            .id(entity.getId())
+            .name(entity.getName())
+            .price(entity.getPrice())
+            .description(entity.getDescription())
+            .build();
     }
 
 }
