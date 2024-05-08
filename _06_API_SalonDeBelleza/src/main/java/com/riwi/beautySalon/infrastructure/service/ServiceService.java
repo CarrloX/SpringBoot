@@ -47,9 +47,8 @@ public class ServiceService implements IServiceService {
     }
 
     @Override
-    public Void delete(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'delete'");
+    public void delete(Long id) {
+        this.serviceRepository.delete(this.find(id));
     }
 
     @Override
