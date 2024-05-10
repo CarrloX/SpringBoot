@@ -56,6 +56,7 @@ public class ServiceService implements IServiceService {
         this.serviceRepository.delete(this.find(id));
     }
 
+    @SuppressWarnings("null")
     @Override
     public Page<ServiceResp> getAll(int page, int size, SortType sortType) {
         if (page < 0)

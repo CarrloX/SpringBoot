@@ -24,6 +24,7 @@ public class EmployeeService implements IEmployeeService {
     @Autowired
     private final EmployeeRepository employeeRepository;
 
+    @SuppressWarnings("null")
     @Override
     public Page<EmployeeResp> getAll(int page, int size, SortType sortType) {
         if (page < 0)

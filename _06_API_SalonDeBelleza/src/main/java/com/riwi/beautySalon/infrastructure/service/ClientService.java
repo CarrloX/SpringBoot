@@ -62,6 +62,7 @@ public class ClientService implements IClientService {
         this.clientRepository.delete(client);
     }
 
+    @SuppressWarnings("null")
     @Override
     public Page<ClientResp> getAll(int page, int size, SortType sortType) {
 
