@@ -61,7 +61,7 @@ public class AppointmentService implements IAppointmentService {
         ServiceEntity service = this.serviceRepository.findById(request.getServiceId())
                 .orElseThrow(() -> new BadRequestException(ErrorMessage.idNotFound("Service")));
 
-                //El empleado esté disponible a esa fecha y hora
+        // El empleado esté disponible a esa fecha y hora
         if (this.isEmployeeAvailable(request.getEmployeeId(), request.getDateTime()) != 0) {
             throw new BadRequestException("EL empleado no esta displonible en esta fecha y hora");
         }
