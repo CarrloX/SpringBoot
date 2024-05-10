@@ -9,5 +9,5 @@ import com.riwi.beautySalon.domain.entity.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, String>{
-    public Optional<User>findByUsername(String usernmame);
+    public Optional<User>findByUserName(String usernmame);
 }

@@ -56,7 +56,7 @@ public class AuthService implements IAuthService {
     }
 
     private User findByUserName(String userName) {
-        return this.userRepository.findByUsername(userName)
+        return this.userRepository.findByUserName(userName)
                 .orElse(null);
     }
 
