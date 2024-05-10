@@ -2,9 +2,9 @@ package com.riwi.beautySalon.api.dto.request;
 
 import java.time.LocalDateTime;
 
+import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,7 +16,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AppointmentReq {
-    @NotBlank(message = "la fecha y hora es requerida")
+    @NotNull(message = "La fecha y hora es requerida")
+    @FutureOrPresent(message = "La fecha no puede ser del pasado")
     private LocalDateTime dateTime;
     @Min(value = 10, message = "la durcion no puede ser menor a 10 minutos")
     @Max(value = 720,message = "la duracion no puede ser mayor a 12 horas")
