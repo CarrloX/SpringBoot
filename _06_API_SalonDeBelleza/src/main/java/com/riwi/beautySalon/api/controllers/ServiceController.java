@@ -1,4 +1,4 @@
-package com.riwi.beautySalon.api.dto.controllers;
+package com.riwi.beautySalon.api.controllers;
 
 import java.util.Objects;
 
