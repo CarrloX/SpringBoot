@@ -49,7 +49,7 @@ public class AuthService implements IAuthService {
         User user = this.findByUserName(request.getUserName());
 
         if (user == null) {
-            throw new BadRequestException("el usuario no es esta registrado");
+            throw new BadRequestException("el usuario no esta registrado");
         }
 
         return AuthResp.builder()
