@@ -7,6 +7,7 @@ import java.util.function.Function;
 
 import javax.crypto.SecretKey;
 
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import com.riwi.beautySalon.domain.entity.User;
@@ -57,29 +58,44 @@ public class JwtService {
     }
 
     // metodo para obtener todos los claims
-    public Claims getAllClaims(String token){
+    public Claims getAllClaims(String token) {
         return Jwts
-            .parser() //desarmamos el jwt
-            .verifyWith(this.getKey()) //lo validamos con la firma del servidor 
-            .build()//lo construimos de nuevo
-            .parseSignedClaims(token)//convertir de base 64 a json el payload
-            .getPayload();//extraemos la informacion del payload (cuerpo del jwt)
+                .parser() // desarmamos el jwt
+                .verifyWith(this.getKey()) // lo validamos con la firma del servidor
+                .build()// lo construimos de nuevo
+                .parseSignedClaims(token)// convertir de base 64 a json el payload
+                .getPayload();// extraemos la informacion del payload (cuerpo del jwt)
     }
-    //obtiene un claim especifico,quiere decir que recibe como parametro
-    //el token y el claim a bsucar, obitene todos los claims, pero returna
-    //uno en especifico
-    public<T> T getClaim(String token, Function<Claims, T>claimsResolver){
+
+    // obtiene un claim especifico,quiere decir que recibe como parametro
+    // el token y el claim a bsucar, obitene todos los claims, pero returna
+    // uno en especifico
+    public <T> T getClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = this.getAllClaims(token);
 
         return claimsResolver.apply(claims);
     }
 
-    //obtiene el usenrmae del token
-    public String getUsernameFrontToken(String token){
+    // obtiene el usenrmae del token
+    public String getUsernameFrontToken(String token) {
         return this.getClaim(token, Claims::getSubject);
     }
-    //obtiene la fecha de expiracion del token
-    public Date getExpiration (String token){
+
+    // obtiene la fecha de expiracion del token
+    public Date getExpiration(String token) {
         return this.getClaim(token, Claims::getExpiration);
+    }
+
+    // metodos para validar el token
+    public boolean isTokenExpired(String token) {
+        return this.getExpiration(token).before(new Date());
+    }
+
+    public boolean isTokenValid(String token, UserDetails userDetails) {
+        String userName = this.getUsernameFrontToken(token);
+
+        // si el usuario que viene en ele token es igual al de DB y ademas el token no
+        // esta expirado entonces retorna verdadero
+        return (userName.equals(userDetails.getUsername()) && !this.isTokenExpired(token));
     }
 }
