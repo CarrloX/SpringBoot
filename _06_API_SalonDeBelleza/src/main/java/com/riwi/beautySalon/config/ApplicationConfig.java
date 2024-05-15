@@ -32,7 +32,7 @@ public class ApplicationConfig {
     public AuthenticationManager authenticationManager(
             AuthenticationConfiguration config) throws Exception {
 
-        return config.getAuthenticationManager();
+                return config.getAuthenticationManager();
 
     }
 
@@ -48,7 +48,7 @@ public class ApplicationConfig {
         authenticationProvider.setPasswordEncoder(this.passwordEncoder());
         authenticationProvider.setUserDetailsService(this.userDetailsService());
 
-        return authenticationProvider();
+        return authenticationProvider;
     }
 
     // este servicio es utilizado por springboot security para cargar detalles
