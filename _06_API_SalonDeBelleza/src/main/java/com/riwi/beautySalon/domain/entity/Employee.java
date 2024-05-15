@@ -13,7 +13,9 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,22 +32,24 @@ public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(length = 100,nullable = false)
+    @Column(length = 100, nullable = false)
     private String firstName;
-    @Column(length = 100,nullable = false)
+    @Column(length = 100, nullable = false)
     private String lastName;
     @Column(length = 100)
     private String email;
-    @Column (length = 20)
+    @Column(length = 20)
     private String phone;
-    @Column (nullable = false)
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private RoleEmployee role;   
-    
+    private RoleEmployee role;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @OneToMany(mappedBy = "employee",fetch = FetchType.EAGER,cascade = CascadeType.ALL,
-    orphanRemoval = false)
+    @OneToMany(mappedBy = "employee", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = false)
     private List<Appointment> appointments;
 }
