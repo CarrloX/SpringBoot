@@ -1,6 +1,7 @@
 package com.riwi.beautySalon.infrastructure.service;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,7 @@ import com.riwi.beautySalon.domain.entity.Employee;
 import com.riwi.beautySalon.domain.entity.ServiceEntity;
 import com.riwi.beautySalon.domain.entity.Appointment;
 import com.riwi.beautySalon.infrastructure.abstract_services.IAppointmentService;
+import com.riwi.beautySalon.infrastructure.helpers.EmailHelper;
 
 import lombok.AllArgsConstructor;
 import jakarta.transaction.Transactional;
@@ -46,6 +48,8 @@ public class AppointmentService implements IAppointmentService {
     private final ClientRepository clientRepository;
     @Autowired
     private final ServiceRepository serviceRepository;
+    @Autowired
+    private final EmailHelper emailHelper;
 
     @Override
     public AppointmentResp create(AppointmentReq request) {
@@ -71,6 +75,10 @@ public class AppointmentService implements IAppointmentService {
         appointment.setClient(client);
         appointment.setService(service);
         appointment.setEmployee(employee);
+
+        if (Objects.nonNull(client.getEmail())) {
+            this.emailHelper.sendMail(client.getEmail(),client.getFirstName(),employee.getFirstName(),appointment.getDateTime());
+        }
 
         return this.entityToResponse(this.appointmentRepository.save(appointment));
     }
